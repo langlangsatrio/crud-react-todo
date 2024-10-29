@@ -1,101 +1,180 @@
+"use client";
+
+import { useState, useRef } from "react";
+import FormInput from "@/components/FormInput";
+import { FaEyeSlash } from "react-icons/fa";
+import { log } from "console";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+const Home = () => {
+  //useEffect
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  //Create ref object (useRef)
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  //Decalare useState (useState)
+  const [count, setCount] = useState<number>(0);
+  //count = array[0], setCount = array[1];
+
+  //--------------------------------------------
+  const onIcrement = () => {
+    const result = count + 1;
+    setCount(result); //Memperbarui data pada state count melalui fungsi setCount
+  };
+
+  //--------------------------------------------
+  const [inputValue, setInputValue] = useState<string>("");
+  const onHandleInput = (e: any) => {
+    // console.log(e.target.value);
+    setInputValue(e.target.value);
+  };
+
+  const [name, setName] = useState<string>("");
+  const [age, setAge] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [data, setData] = useState<any[]>([]);
+
+  const onHandleAge = (e: any) => {
+    setAge(e.target.value);
+  };
+  const onHandleEmail = (e: any) => {
+    setEmail(e.target.value);
+  };
+
+  const onSave = (e: any) => {
+    //Cara 1
+    // const temp = [...data];
+    // temp.push({name, age, email})
+    // setData(temp);
+    //Cara 2
+    // setData([...data, { name, email, age }]);
+
+    if (passwordRef.current) {
+      console.log("ref from password input: ", passwordRef.current.value);
+    }
+  };
+
+  const [user, setUser] = useState<{
+    name: string;
+    age: string;
+    email: string;
+  }>({ name: "", age: "", email: "" });
+
+  const printData = () => {
+    return data.map((value: any, index: any) => {
+      return (
+        <tr key={`${value}-${index}`} className="border border-collapse">
+          <td className="text-center border border-collapse">{index + 1}</td>
+          <td className="text-center border border-collapse">{value.name}</td>
+          <td className="text-center border border-collapse">{value.age}</td>
+          <td className="text-center border border-collapse">{value.email}</td>
+          <td className="text-center border border-collapse">
+            <button type="button" className="bg-slate-300 rounded-md">
+              Edit
+            </button>
+            <button type="button" className="bg-red-500 rounded-md">
+              Delete
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const [password, setPassword] = useState<any>("");
+  const onHandlePassword = (e: any) => {
+    setPassword(!password);
+    console.log(password);
+  };
+
+  return (
+    <div className="w-1/2 m-auto border border-red-600">
+      <h1 className="text-5xl text-center uppercase">Management Data</h1>
+      <div className="hidden">
+        {/** Display data from state */}
+        <h1 className="text-9xl">{count}</h1>
+        <button
+          type="button"
+          className="bg-gray-300 p-2 rounded-md"
+          onClick={onIcrement}
+        >
+          Increment
+        </button>
+
+        {/**-------------------------*/}
+        <div>
+          <input
+            type="text"
+            placeholder="Type something"
+            className="p-2 border"
+            onChange={onHandleInput}
+          />
+          <span>{inputValue}</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </div>
+      <div id="form-data" className="flex flex-col gap-3">
+        <FormInput
+          onChange={(e: any) => {
+            setUser({ ...user, name: e.target.value });
+          }}
+          type="text"
+          label="Fullname"
+          placeholder="Type your name"
+        />
+        <FormInput
+          onChange={(e: any) => {
+            setUser({ ...user, age: e.target.value });
+          }}
+          type="number"
+          label="Age"
+          placeholder="Type your age"
+        />
+        <FormInput
+          onChange={(e: any) => {
+            setUser({ ...user, email: e.target.value });
+          }}
+          type="email"
+          label="Email"
+          placeholder="Type your email"
+        />
+        <div className="flex">
+          <FormInput
+            ref={passwordRef}
+            type="password"
+            label="Password"
+            placeholder="Type your password"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </div>
+
+        <button
+          className="bg-slate-300 rounded-md"
+          type="button"
+          onClick={onSave}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Save
+        </button>
+      </div>
+      <div className="flex flex-col gap-4">
+        <span>{name}</span>
+        <span>{age}</span>
+        <span>{email}</span>
+      </div>
+      <div>
+        <table className="w-full border border-collapse mt-5">
+          <thead>
+            <tr>
+              <th className="border border-collapse text-center">No</th>
+              <th className="border border-collapse text-center">Name</th>
+              <th className="border border-collapse text-center">Age</th>
+              <th className="border border-collapse text-center">Email</th>
+              <th className="border border-collapse text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>{printData()}</tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
+
+export default Home;
