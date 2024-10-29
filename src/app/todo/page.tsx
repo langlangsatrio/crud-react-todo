@@ -24,7 +24,7 @@ export default function Home() {
     } else {
       setTodo({
         list: [...todo.list, todo.currentInput], //memasukan currentInput ke list
-        currentInput: "", //reset current input
+        currentInput: todo.currentInput, //reset current input
       });
     }
   };
@@ -36,6 +36,10 @@ export default function Home() {
       currentInput: "",
     });
     printData();
+    if (todo.list.length < check.length) {
+      //Perbaikan centang. Ada yang tersangkut
+      check.length = todo.list.length;
+    }
   };
 
   //Checkbox
@@ -46,7 +50,7 @@ export default function Home() {
   const onHandleChecked = (e: any) => {
     if (e.target.checked) {
       //Check apakah e.target => tercentang (true)
-      setIsChecked((prev: any) => [...prev, e]); //Kalau iya, tambahkan index/item ke array
+      setIsChecked((prev: any) => [...prev, e]); //Kalau iya, tambahkan item (random) ke array.
       printChecked(); //Print Checked (perintah untuk melihat length array)
     } else {
       setIsChecked((prev) => prev.splice(1, 1)); //Kalau tidak, delete item dari array
